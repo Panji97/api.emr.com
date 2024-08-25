@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { AuthenticationService } from './auth.service'
 
 export class AuthenticationController {
@@ -9,14 +9,14 @@ export class AuthenticationController {
   }
 
   register() {
-    return async (req: Request, res: Response) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
       try {
         return res.status(201).json({
           message: 'success register new user',
           data: await this.service.register(req.body)
         })
       } catch (error) {
-        return error
+        next(error)
       }
     }
   }
