@@ -19,7 +19,7 @@ export class PgProvider {
     try {
       if (this.sequelize) {
         this.sequelize.authenticate()
-        console.log('Connection has been esteblised successfully')
+        // console.log('Connection has been esteblised successfully')
       } else throw new Error('Sequelize instance not initialized')
     } catch (error) {
       console.error('Unable to connect to the database: ', error)
