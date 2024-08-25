@@ -1,6 +1,5 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
 import { AuthenticationController } from './auth.controllers'
-import { users } from '../../models/users'
 
 export class AuthenticationRoutes {
   private readonly router: Router
