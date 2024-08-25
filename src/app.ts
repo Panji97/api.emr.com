@@ -1,6 +1,6 @@
+import express, { Express, json } from 'express'
 import { pgClient } from './config/database'
 import { PORT } from './uhuuy.json'
-import express, { Express, json } from 'express'
 import { router } from './routes'
 import { morganNotes } from './config/morgan'
 

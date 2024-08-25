@@ -1,13 +1,18 @@
+import * as bcrypt from 'bcrypt'
 import { model } from '../../models'
 import { usersAttributes } from '../../models/users'
 
 export class AuthenticationService {
   async register(payload: usersAttributes) {
-    const [instance] = await model.users.upsert({
-      email: payload.email,
-      password: payload.password
-    })
+    const userExist = await model.users.findByPk(payload.email)
 
-    return instance
+    if (userExist) throw new Error('Email already exist')
+
+    const hashPassword = await bcrypt.hash(payload.password, 12)
+
+    return await model.users.create({
+      email: payload.email,
+      password: hashPassword
+    })
   }
 }

@@ -16,7 +16,6 @@ export class AuthenticationController {
           data: await this.service.register(req.body)
         })
       } catch (error) {
-        console.log(error)
         return error
       }
     }
