@@ -1,11 +1,19 @@
 import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
+import * as crypto from 'crypto'
 import { SECRET_JWT } from '../../uhuuy.json'
 import { model } from '../../models'
 import { usersAttributes } from '../../models/users'
 import { AppError } from '../../exception/exception.custom'
+import { EmailService } from '../../utils/mailer'
 
 export class AuthenticationService {
+  private email: EmailService
+
+  constructor() {
+    this.email = new EmailService()
+  }
+
   async register(payload: usersAttributes) {
     const userExist = await model.users.findByPk(payload.email)
 
@@ -47,11 +55,43 @@ export class AuthenticationService {
       }
     )
 
-    const data = {
-      email: userExist.email,
-      accessToken
-    }
+    return accessToken
+  }
 
-    return data
+  async forgotpassword(payload: usersAttributes) {
+    try {
+      const userExist = await model.users.findByPk(payload.email)
+
+      if (!userExist) throw new AppError('Email is not registered!', 404)
+
+      const resetToken = crypto.randomBytes(32).toString('hex')
+      const resetTokenExpiryTime = new Date()
+      resetTokenExpiryTime.setHours(resetTokenExpiryTime.getHours() + 1)
+
+      await model.resetpassword.create({
+        email: payload.email,
+        tokenresetpassword: resetToken,
+        tokenexpirytime: resetTokenExpiryTime
+      })
+
+      // await this.mailerService.sendMail({
+      //   to: payload.email,
+      //   from: 'noreply@yoursupportteam.com',
+      //   subject: 'Password Reset Request',
+      //   template: './forgot-password.ejs',
+      //   context: {
+      //     resetLink: `http://localhost:3000/auth/reset-password?token=${resetToken}&email=${payload.email}`
+      //   }
+      // })
+
+      const result = {
+        message: 'success',
+        detail: 'Success Request Reset Password, Please check your email!'
+      }
+
+      return result
+    } catch (error) {
+      throw error
+    }
   }
 }
