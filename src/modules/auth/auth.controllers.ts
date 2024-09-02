@@ -33,4 +33,30 @@ export class AuthenticationController {
       }
     }
   }
+
+  forgotpassword() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json({
+          message: 'success forgot password',
+          data: await this.service.forgotpassword(req.body)
+        })
+      } catch (error) {
+        next(error)
+      }
+    }
+  }
+
+  resetpassword() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json({
+          message: 'success reset password',
+          data: await this.service.resetpassword(req.body)
+        })
+      } catch (error) {
+        next(error)
+      }
+    }
+  }
 }

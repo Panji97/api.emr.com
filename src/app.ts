@@ -1,11 +1,11 @@
 import express, { Express, json } from 'express'
-import { pgClient } from './config/database'
+import { pgClient } from './config/database.config'
 import { PORT } from './uhuuy.json'
 import { indexRouter } from './routes'
-import { morganNotes } from './config/morgan'
+import { morganNotes } from './config/morgan.config'
 import { errorHandler } from './exception/exception.global'
-import { helmetHandler } from './config/helmet'
-import { compressionHandler } from './config/compression'
+import { helmetHandler } from './config/helmet.config'
+import { compressionHandler } from './config/compression.config'
 
 const app: Express = express()
 

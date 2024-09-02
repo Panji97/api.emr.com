@@ -1,4 +1,4 @@
-import { pgClient } from '../config/database'
+import { pgClient } from '../config/database.config'
 import { initModels } from './init-models'
 
 const sequlize = pgClient.getConnection()

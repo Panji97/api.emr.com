@@ -1,11 +1,12 @@
-import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import * as crypto from 'crypto'
-import { SECRET_JWT } from '../../uhuuy.json'
+import { sign } from 'jsonwebtoken'
 import { model } from '../../models'
+import { SECRET_JWT, WHITE_LIST } from '../../uhuuy.json'
 import { usersAttributes } from '../../models/users'
+import { EmailService } from '../../utils/nodemailer'
 import { AppError } from '../../exception/exception.custom'
-import { EmailService } from '../../utils/mailer'
+import { resetpasswordAttributes } from '../../models/resetpassword'
 
 export class AuthenticationService {
   private email: EmailService
@@ -32,11 +33,9 @@ export class AuthenticationService {
 
     if (!userExist) throw new AppError('Email is not registered!', 404)
 
-    if (!(await bcrypt.compare(payload.password, userExist.password)))
-      throw new AppError('Invalid Password', 403)
+    if (!(await bcrypt.compare(payload.password, userExist.password))) throw new AppError('Invalid Password', 403)
 
-    const tokenExpiry =
-      payload.rememberme || userExist.rememberme ? '30d' : '1d'
+    const tokenExpiry = payload.rememberme || userExist.rememberme ? '30d' : '1d'
 
     const accessToken = sign({ email: payload.email }, SECRET_JWT, {
       algorithm: 'HS256',
@@ -59,39 +58,51 @@ export class AuthenticationService {
   }
 
   async forgotpassword(payload: usersAttributes) {
-    try {
-      const userExist = await model.users.findByPk(payload.email)
+    const userExist = await model.users.findByPk(payload.email)
 
-      if (!userExist) throw new AppError('Email is not registered!', 404)
+    if (!userExist) throw new AppError('Email is not registered!', 404)
 
-      const resetToken = crypto.randomBytes(32).toString('hex')
-      const resetTokenExpiryTime = new Date()
-      resetTokenExpiryTime.setHours(resetTokenExpiryTime.getHours() + 1)
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    const resetTokenExpiryTime = new Date(Date.now() + 3600000)
 
-      await model.resetpassword.create({
-        email: payload.email,
-        tokenresetpassword: resetToken,
-        tokenexpirytime: resetTokenExpiryTime
-      })
+    await model.resetpassword.create({
+      email: payload.email,
+      tokenresetpassword: resetToken,
+      tokenexpirytime: resetTokenExpiryTime
+    })
 
-      // await this.mailerService.sendMail({
-      //   to: payload.email,
-      //   from: 'noreply@yoursupportteam.com',
-      //   subject: 'Password Reset Request',
-      //   template: './forgot-password.ejs',
-      //   context: {
-      //     resetLink: `http://localhost:3000/auth/reset-password?token=${resetToken}&email=${payload.email}`
-      //   }
-      // })
+    return this.email.sendMail(payload.email, 'Reset Password Request', 'forgot-password', {
+      resetLink: `${WHITE_LIST}/auth/reset-password?token=${resetToken}&email=${payload.email}`
+    })
+  }
 
-      const result = {
-        message: 'success',
-        detail: 'Success Request Reset Password, Please check your email!'
+  async resetpassword(payload: resetpasswordAttributes & { password: string }) {
+    const { password, ...resetPayload } = payload
+
+    const resetRequest = await model.resetpassword.findOne({
+      where: {
+        email: resetPayload.email,
+        tokenresetpassword: resetPayload.tokenresetpassword
       }
+    })
 
-      return result
-    } catch (error) {
-      throw error
-    }
+    if (!resetRequest) throw new AppError('Invalid token or email', 401)
+
+    if (resetRequest.tokenexpirytime < new Date()) throw new AppError('Token has expired', 410)
+
+    const userExist = await model.users.findByPk(resetPayload.email)
+
+    if (!userExist) throw new AppError('User not found', 404)
+
+    const hashPassword = await bcrypt.hash(password, 12)
+
+    await model.users.update({ password: hashPassword }, { where: { email: resetPayload.email } })
+
+    return await model.resetpassword.destroy({
+      where: {
+        email: resetPayload.email,
+        tokenresetpassword: resetPayload.tokenresetpassword
+      }
+    })
   }
 }
