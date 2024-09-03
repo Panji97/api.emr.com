@@ -7,6 +7,7 @@ export interface usersAttributes {
   password: string;
   token?: string;
   rememberme?: boolean;
+  verify?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -14,7 +15,7 @@ export interface usersAttributes {
 
 export type usersPk = "email";
 export type usersId = users[usersPk];
-export type usersOptionalAttributes = "username" | "token" | "rememberme" | "createdAt" | "updatedAt" | "deletedAt";
+export type usersOptionalAttributes = "username" | "token" | "rememberme" | "verify" | "createdAt" | "updatedAt" | "deletedAt";
 export type usersCreationAttributes = Optional<usersAttributes, usersOptionalAttributes>;
 
 export class users extends Model<usersAttributes, usersCreationAttributes> implements usersAttributes {
@@ -23,6 +24,7 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   password!: string;
   token?: string;
   rememberme?: boolean;
+  verify?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -50,6 +52,11 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
     rememberme: {
       type: DataTypes.BOOLEAN,
       allowNull: true
+    },
+    verify: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   }, {
     sequelize,

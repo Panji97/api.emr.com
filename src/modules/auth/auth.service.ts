@@ -71,7 +71,7 @@ export class AuthenticationService {
       tokenexpirytime: resetTokenExpiryTime
     })
 
-    return this.email.sendMail(payload.email, 'Reset Password Request', 'forgot-password', {
+    return this.email.sendMail(payload.email, 'Reset Password Request', 'reset-password', {
       resetLink: `${WHITE_LIST}/auth/reset-password?token=${resetToken}&email=${payload.email}`
     })
   }
