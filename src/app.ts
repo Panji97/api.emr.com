@@ -1,7 +1,7 @@
 import express, { Express, json, urlencoded } from 'express'
 import { pgClient } from './config/config.database'
 import { PORT } from './uhuuy.json'
-import { indexRouter } from './routes'
+import { indexRouter } from './routes/routes.index'
 import { morganNotes } from './config/config.morgan'
 import { errorHandler } from './exception/exception.global'
 import { helmetHandler } from './config/config.helmet'
