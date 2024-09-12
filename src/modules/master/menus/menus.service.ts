@@ -41,7 +41,7 @@ export class MenusService {
     return result
   }
 
-  async userHasMenus(payload: paginationInterface) {
+  async userHasMenus(payload: paginationInterface, user: any) {
     const page = payload.page || 1
     const limit = payload.limit || 5
     const offset = (page - 1) * limit
@@ -49,7 +49,7 @@ export class MenusService {
     const { rows, count } = await model.user_menus_header.findAndCountAll({
       attributes: [],
       where: {
-        user_id: 1
+        user_id: user.id
       },
       include: [
         {
@@ -59,7 +59,15 @@ export class MenusService {
         },
         {
           model: model.user_menus,
-          as: 'user_menus'
+          as: 'user_menus',
+          attributes: ['menus_id'],
+          include: [
+            {
+              model: model.menus,
+              as: 'menu',
+              attributes: { exclude: ['id', 'header_id'] }
+            }
+          ]
         }
       ],
       limit,

@@ -22,7 +22,7 @@ export class MenusController {
   userHasMenu() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.userHasMenus(req.query))
+        return res.status(200).json(await this.service.userHasMenus(req.query, req.user))
       } catch (error) {
         console.log(error)
         next(error)

@@ -29,6 +29,7 @@ export class AuthenticationController {
           data: await this.service.login(req.body)
         })
       } catch (error) {
+        console.log(error)
         next(error)
       }
     }

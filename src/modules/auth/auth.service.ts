@@ -16,7 +16,7 @@ export class AuthenticationService {
   }
 
   async register(payload: usersAttributes) {
-    const userExist = await model.users.findByPk(payload.email)
+    const userExist = await model.users.findOne({ where: { email: payload.email } })
 
     if (userExist) throw new AppError('Email already exist', 409)
 
@@ -29,7 +29,7 @@ export class AuthenticationService {
   }
 
   async login(payload: usersAttributes) {
-    const userExist = await model.users.findByPk(payload.email)
+    const userExist = await model.users.findOne({ where: { email: payload.email } })
 
     if (!userExist) throw new AppError('Email is not registered!', 404)
 
@@ -37,7 +37,7 @@ export class AuthenticationService {
 
     const tokenExpiry = payload.rememberme || userExist.rememberme ? '30d' : '1d'
 
-    const accessToken = sign({ email: payload.email }, SECRET_JWT, {
+    const accessToken = sign({ email: payload.email, id: userExist.id }, SECRET_JWT, {
       algorithm: 'HS256',
       expiresIn: tokenExpiry
     })
@@ -58,7 +58,7 @@ export class AuthenticationService {
   }
 
   async forgotpassword(payload: usersAttributes) {
-    const userExist = await model.users.findByPk(payload.email)
+    const userExist = await model.users.findOne({ where: { email: payload.email } })
 
     if (!userExist) throw new AppError('Email is not registered!', 404)
 
@@ -90,7 +90,7 @@ export class AuthenticationService {
 
     if (resetRequest.tokenexpirytime < new Date()) throw new AppError('Token has expired', 410)
 
-    const userExist = await model.users.findByPk(resetPayload.email)
+    const userExist = await model.users.findOne({ where: { email: resetPayload.email } })
 
     if (!userExist) throw new AppError('User not found', 404)
 

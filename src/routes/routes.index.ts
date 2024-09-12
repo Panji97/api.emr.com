@@ -11,7 +11,7 @@ const indexRouter = () => {
   })
 
   router.use('/o', new AuthenticationRoutes().routes())
-  router.use('/master', new MasterRoutes().routes())
+  router.use('/master', new Authenticate().verifyToken, new MasterRoutes().routes())
 
   return router
 }
