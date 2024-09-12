@@ -12,6 +12,7 @@ export class MenusRoutes {
 
   routes(): Router {
     this.router.get('/', this.controller.findAll())
+    this.router.get('/user', this.controller.userHasMenu())
     return this.router
   }
 }

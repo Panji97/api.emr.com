@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { menus_header, menus_headerId } from './menus_header';
+import type { user_menus, user_menusId } from './user_menus';
 import type { users, usersId } from './users';
 
 export interface user_menus_headerAttributes {
@@ -24,6 +25,18 @@ export class user_menus_header extends Model<user_menus_headerAttributes, user_m
   getMenus_header!: Sequelize.BelongsToGetAssociationMixin<menus_header>;
   setMenus_header!: Sequelize.BelongsToSetAssociationMixin<menus_header, menus_headerId>;
   createMenus_header!: Sequelize.BelongsToCreateAssociationMixin<menus_header>;
+  // user_menus_header hasMany user_menus via user_menus_header_id
+  user_menus!: user_menus[];
+  getUser_menus!: Sequelize.HasManyGetAssociationsMixin<user_menus>;
+  setUser_menus!: Sequelize.HasManySetAssociationsMixin<user_menus, user_menusId>;
+  addUser_menu!: Sequelize.HasManyAddAssociationMixin<user_menus, user_menusId>;
+  addUser_menus!: Sequelize.HasManyAddAssociationsMixin<user_menus, user_menusId>;
+  createUser_menu!: Sequelize.HasManyCreateAssociationMixin<user_menus>;
+  removeUser_menu!: Sequelize.HasManyRemoveAssociationMixin<user_menus, user_menusId>;
+  removeUser_menus!: Sequelize.HasManyRemoveAssociationsMixin<user_menus, user_menusId>;
+  hasUser_menu!: Sequelize.HasManyHasAssociationMixin<user_menus, user_menusId>;
+  hasUser_menus!: Sequelize.HasManyHasAssociationsMixin<user_menus, user_menusId>;
+  countUser_menus!: Sequelize.HasManyCountAssociationsMixin;
   // user_menus_header belongsTo users via user_id
   user!: users;
   getUser!: Sequelize.BelongsToGetAssociationMixin<users>;

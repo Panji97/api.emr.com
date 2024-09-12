@@ -58,6 +58,8 @@ export function initModels(sequelize: Sequelize) {
   menus_header.hasMany(menus, { as: "menus", foreignKey: "header_id"});
   user_menus_header.belongsTo(menus_header, { as: "menus_header", foreignKey: "menus_header_id"});
   menus_header.hasMany(user_menus_header, { as: "user_menus_headers", foreignKey: "menus_header_id"});
+  user_menus.belongsTo(user_menus_header, { as: "user_menus_header", foreignKey: "user_menus_header_id"});
+  user_menus_header.hasMany(user_menus, { as: "user_menus", foreignKey: "user_menus_header_id"});
   user_menus.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(user_menus, { as: "user_menus", foreignKey: "user_id"});
   user_menus_header.belongsTo(users, { as: "user", foreignKey: "user_id"});
