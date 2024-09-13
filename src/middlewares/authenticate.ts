@@ -16,9 +16,7 @@ export class Authenticate {
       // Ambil token dari header Authorization
       const token = req.headers.authorization?.split(' ')[1]
 
-      if (!token) {
-        throw new AppError('Authentication token is missing', 401)
-      }
+      if (!token) return next(new AppError('Authentication token is missing', 401))
 
       // Verifikasi token menggunakan secret key
       const decoded = jwt.verify(token, SECRET_JWT as string)
