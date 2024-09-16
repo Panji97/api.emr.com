@@ -28,6 +28,7 @@ export class UserController {
           data: await this.service.findone(email)
         })
       } catch (error) {
+        console.log(error)
         next(error)
       }
     }

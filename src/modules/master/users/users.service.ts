@@ -33,7 +33,8 @@ export class UserService {
   }
 
   async findone(email: string) {
-    const user = await model.users.findByPk(email, {
+    const user = await model.users.findOne({
+      where: { email },
       attributes: ['email', 'username']
     })
 
