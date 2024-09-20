@@ -6,7 +6,7 @@ export class AppError extends Error {
     super(message)
 
     this.statusCode = statusCode
-    this.error = this.getStatusMessage(statusCode) // Get the status message
+    this.error = this.getStatusMessage(statusCode)
 
     this.name = this.constructor.name
 
@@ -21,7 +21,6 @@ export class AppError extends Error {
       404: 'Not Found',
       409: 'Conflict',
       500: 'Internal Server Error'
-      // Add other status codes and messages as needed
     }
 
     return statusMessages[statusCode] || 'Error'
