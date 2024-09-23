@@ -72,7 +72,7 @@ export class AuthenticationService {
     })
 
     return this.email.sendMail(payload.email, 'Reset Password Request', 'reset-password', {
-      resetLink: `${WHITE_LIST}/auth/reset-password?token=${resetToken}&email=${payload.email}`
+      resetLink: `${WHITE_LIST}/auth/reset-password?tokenresetpassword=${resetToken}&email=${payload.email}`
     })
   }
 
@@ -88,7 +88,7 @@ export class AuthenticationService {
 
     if (!resetRequest) throw new AppError('Invalid token or email', 401)
 
-    if (resetRequest.tokenexpirytime < new Date()) throw new AppError('Token has expired', 410)
+    if (resetRequest.tokenexpirytime > new Date()) throw new AppError('Token has expired', 410)
 
     const userExist = await model.users.findOne({ where: { email: resetPayload.email } })
 
