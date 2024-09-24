@@ -1,33 +1,13 @@
 import { AppError } from '../../../exception/exception.custom'
 import { model } from '../../../models'
-import { paginationInterface } from './users.interface'
 
 export class UserService {
-  async findall(payload: paginationInterface) {
-    const page = payload.page || 1
-    const limit = payload.limit || 5
-    const offset = (page - 1) * limit
-
-    const { rows, count } = await model.users.findAndCountAll({
-      attributes: ['email', 'username'],
-      where: {
-        verify: true
-      },
-      limit,
-      offset
+  async findall() {
+    const result = await model.users.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt', 'token'] }
     })
 
-    if (!rows) throw new AppError('Data not found', 404)
-
-    const result = {
-      pagination: {
-        total: count,
-        totalpage: Math.ceil(count / limit),
-        currentpage: Number(page),
-        limit: Number(limit)
-      },
-      data: rows
-    }
+    if (!result) throw new AppError('Data not found', 404)
 
     return result
   }
