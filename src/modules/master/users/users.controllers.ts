@@ -33,4 +33,15 @@ export class UserController {
       }
     }
   }
+
+  userHasMenu() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.userHasMenu(req.user))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
 }

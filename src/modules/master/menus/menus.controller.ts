@@ -19,10 +19,21 @@ export class MenusController {
     }
   }
 
+  createUserMenu() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.createUserMenu(req.body))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
   userHasMenu() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.userHasMenus(req.query, req.user))
+        return res.status(200).json(await this.service.userHasMenu(req.user))
       } catch (error) {
         console.log(error)
         next(error)
