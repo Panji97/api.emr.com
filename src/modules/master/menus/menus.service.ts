@@ -35,7 +35,33 @@ export class MenusService {
         currentpage: Number(page),
         limit: Number(limit)
       },
-      data: rows
+      data: rows.map((e) => ({
+        id: e.id,
+        key: e.id,
+        label: e.label,
+        to: e.to_path,
+        children: e.menus.map((i) => ({
+          id: e.id,
+          key: `${e.id}-${i.id}`,
+          label: i.label,
+          icon: i.icon,
+          to: i.to_path,
+          url: i.url,
+          target: i.target,
+          badge: i.badge,
+          class: i.class,
+          preventexact: i.preventexact,
+          children: i.menus_items.map((a) => ({
+            id: a.id,
+            key: `${i.id}-${a.id}`,
+            label: a.label,
+            icon: a.icon,
+            to: a.to_path,
+            url: a.url,
+            target: a.target
+          }))
+        }))
+      }))
     }
 
     return result
