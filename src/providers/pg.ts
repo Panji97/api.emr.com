@@ -11,7 +11,13 @@ export class PgProvider {
       dialect: 'postgres',
       host: db.HOST,
       port: db.PORT,
-      logging: false
+      logging: false,
+      dialectOptions: {
+        ssl: {
+          require: db.SSLMODE === 'require',
+          rejectUnauthorized: false
+        }
+      }
     })
   }
 
