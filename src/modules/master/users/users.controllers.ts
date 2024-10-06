@@ -34,6 +34,17 @@ export class UserController {
     }
   }
 
+  upsert() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.upsertUserPermission(req.body))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
   userHasMenu() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
