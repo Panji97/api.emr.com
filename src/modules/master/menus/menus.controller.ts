@@ -56,7 +56,8 @@ export class MenusController {
   getAllMain() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.getAllMain(req.query))
+        const { id } = req.params
+        return res.status(200).json(await this.service.getAllMain(req.query, Number(id)))
       } catch (error) {
         console.log(error)
         next(error)
@@ -90,7 +91,8 @@ export class MenusController {
   getAllChild() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.getAllChild(req.query))
+        const { id } = req.params
+        return res.status(200).json(await this.service.getAllChild(req.query, Number(id)))
       } catch (error) {
         console.log(error)
         next(error)

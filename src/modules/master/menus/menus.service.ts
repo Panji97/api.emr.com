@@ -54,19 +54,21 @@ export class MenusService {
     })
   }
 
-  async getAllMain(payload: paginationInterface) {
+  async getAllMain(payload: paginationInterface, id: number) {
     const page = payload.page || 1
-    const limit = payload.limit || 5
+    const limit = payload.limit || 20
     const offset = (page - 1) * limit
 
     const { rows, count } = await model.ms_mmain.findAndCountAll({
+      where: {
+        header_id: id
+      },
       limit,
       offset
     })
 
     if (!rows) throw new AppError('Data not found', 404)
 
-    if (!rows) throw new AppError('Data not found', 404)
     const result = {
       pagination: {
         total: count,
@@ -96,12 +98,15 @@ export class MenusService {
     })
   }
 
-  async getAllChild(payload: paginationInterface) {
+  async getAllChild(payload: paginationInterface, id: number) {
     const page = payload.page || 1
-    const limit = payload.limit || 5
+    const limit = payload.limit || 20
     const offset = (page - 1) * limit
 
     const { rows, count } = await model.ms_mchild.findAndCountAll({
+      where: {
+        menu_id: id
+      },
       limit,
       offset
     })

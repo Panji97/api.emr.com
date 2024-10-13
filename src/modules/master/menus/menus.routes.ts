@@ -18,10 +18,10 @@ export class MenusRoutes {
     this.router.get('/parent', this.controller.getAllParent())
     this.router.delete('/parent/:id', this.controller.deleteParent())
     this.router.post('/main', this.validation.upsertMain(), this.controller.upsertMain())
-    this.router.get('/main', this.controller.getAllMain())
+    this.router.get('/main/:id', this.controller.getAllMain())
     this.router.delete('/main/:id', this.controller.deleteMain())
     this.router.post('/child', this.validation.upsertChild(), this.controller.upsertChild())
-    this.router.get('/child', this.controller.getAllChild())
+    this.router.get('/child/:id', this.controller.getAllChild())
     this.router.delete('/child/:id', this.controller.deleteChild())
     return this.router
   }
