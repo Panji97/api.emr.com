@@ -1,82 +1,60 @@
 import type { Sequelize } from "sequelize";
-import { menus as _menus } from "./menus";
-import type { menusAttributes, menusCreationAttributes } from "./menus";
-import { menus_header as _menus_header } from "./menus_header";
-import type { menus_headerAttributes, menus_headerCreationAttributes } from "./menus_header";
-import { menus_item as _menus_item } from "./menus_item";
-import type { menus_itemAttributes, menus_itemCreationAttributes } from "./menus_item";
+import { ms_mchild as _ms_mchild } from "./ms_mchild";
+import type { ms_mchildAttributes, ms_mchildCreationAttributes } from "./ms_mchild";
+import { ms_mmain as _ms_mmain } from "./ms_mmain";
+import type { ms_mmainAttributes, ms_mmainCreationAttributes } from "./ms_mmain";
+import { ms_mparent as _ms_mparent } from "./ms_mparent";
+import type { ms_mparentAttributes, ms_mparentCreationAttributes } from "./ms_mparent";
+import { ms_roles as _ms_roles } from "./ms_roles";
+import type { ms_rolesAttributes, ms_rolesCreationAttributes } from "./ms_roles";
 import { resetpassword as _resetpassword } from "./resetpassword";
 import type { resetpasswordAttributes, resetpasswordCreationAttributes } from "./resetpassword";
-import { user_menu as _user_menu } from "./user_menu";
-import type { user_menuAttributes, user_menuCreationAttributes } from "./user_menu";
-import { user_menu_header as _user_menu_header } from "./user_menu_header";
-import type { user_menu_headerAttributes, user_menu_headerCreationAttributes } from "./user_menu_header";
-import { user_menu_item as _user_menu_item } from "./user_menu_item";
-import type { user_menu_itemAttributes, user_menu_itemCreationAttributes } from "./user_menu_item";
 import { users as _users } from "./users";
 import type { usersAttributes, usersCreationAttributes } from "./users";
 
 export {
-  _menus as menus,
-  _menus_header as menus_header,
-  _menus_item as menus_item,
+  _ms_mchild as ms_mchild,
+  _ms_mmain as ms_mmain,
+  _ms_mparent as ms_mparent,
+  _ms_roles as ms_roles,
   _resetpassword as resetpassword,
-  _user_menu as user_menu,
-  _user_menu_header as user_menu_header,
-  _user_menu_item as user_menu_item,
   _users as users,
 };
 
 export type {
-  menusAttributes,
-  menusCreationAttributes,
-  menus_headerAttributes,
-  menus_headerCreationAttributes,
-  menus_itemAttributes,
-  menus_itemCreationAttributes,
+  ms_mchildAttributes,
+  ms_mchildCreationAttributes,
+  ms_mmainAttributes,
+  ms_mmainCreationAttributes,
+  ms_mparentAttributes,
+  ms_mparentCreationAttributes,
+  ms_rolesAttributes,
+  ms_rolesCreationAttributes,
   resetpasswordAttributes,
   resetpasswordCreationAttributes,
-  user_menuAttributes,
-  user_menuCreationAttributes,
-  user_menu_headerAttributes,
-  user_menu_headerCreationAttributes,
-  user_menu_itemAttributes,
-  user_menu_itemCreationAttributes,
   usersAttributes,
   usersCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
-  const menus = _menus.initModel(sequelize);
-  const menus_header = _menus_header.initModel(sequelize);
-  const menus_item = _menus_item.initModel(sequelize);
+  const ms_mchild = _ms_mchild.initModel(sequelize);
+  const ms_mmain = _ms_mmain.initModel(sequelize);
+  const ms_mparent = _ms_mparent.initModel(sequelize);
+  const ms_roles = _ms_roles.initModel(sequelize);
   const resetpassword = _resetpassword.initModel(sequelize);
-  const user_menu = _user_menu.initModel(sequelize);
-  const user_menu_header = _user_menu_header.initModel(sequelize);
-  const user_menu_item = _user_menu_item.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
-  menus_item.belongsTo(menus, { as: "menu", foreignKey: "menu_id"});
-  menus.hasMany(menus_item, { as: "menus_items", foreignKey: "menu_id"});
-  user_menu.belongsTo(menus, { as: "menu", foreignKey: "menu_id"});
-  menus.hasMany(user_menu, { as: "user_menus", foreignKey: "menu_id"});
-  menus.belongsTo(menus_header, { as: "header", foreignKey: "header_id"});
-  menus_header.hasMany(menus, { as: "menus", foreignKey: "header_id"});
-  user_menu_header.belongsTo(menus_header, { as: "header", foreignKey: "header_id"});
-  menus_header.hasMany(user_menu_header, { as: "user_menu_headers", foreignKey: "header_id"});
-  user_menu.belongsTo(users, { as: "user", foreignKey: "user_id"});
-  users.hasMany(user_menu, { as: "user_menus", foreignKey: "user_id"});
-  user_menu_header.belongsTo(users, { as: "user", foreignKey: "user_id"});
-  users.hasMany(user_menu_header, { as: "user_menu_headers", foreignKey: "user_id"});
+  ms_mchild.belongsTo(ms_mmain, { as: "menu", foreignKey: "menu_id"});
+  ms_mmain.hasMany(ms_mchild, { as: "ms_mchildren", foreignKey: "menu_id"});
+  ms_mmain.belongsTo(ms_mparent, { as: "header", foreignKey: "header_id"});
+  ms_mparent.hasMany(ms_mmain, { as: "ms_mmains", foreignKey: "header_id"});
 
   return {
-    menus: menus,
-    menus_header: menus_header,
-    menus_item: menus_item,
+    ms_mchild: ms_mchild,
+    ms_mmain: ms_mmain,
+    ms_mparent: ms_mparent,
+    ms_roles: ms_roles,
     resetpassword: resetpassword,
-    user_menu: user_menu,
-    user_menu_header: user_menu_header,
-    user_menu_item: user_menu_item,
     users: users,
   };
 }

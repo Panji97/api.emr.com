@@ -12,8 +12,6 @@ export class UserRoutes {
 
   routes(): Router {
     this.router.get('/', this.controller.findall())
-    this.router.get('/menu', this.controller.userHasMenu())
-    this.router.post('/menu', this.controller.upsert())
     return this.router
   }
 }

@@ -8,10 +8,10 @@ export class MenusController {
     this.service = new MenusService()
   }
 
-  findAll() {
+  upsertParent() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.findAll(req.query))
+        return res.status(200).json(await this.service.upsertParentMenu(req.body))
       } catch (error) {
         console.log(error)
         next(error)
@@ -19,10 +19,10 @@ export class MenusController {
     }
   }
 
-  createUserMenu() {
+  getAllParent() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.createUserMenu(req.body))
+        return res.status(200).json(await this.service.getAllParent(req.query))
       } catch (error) {
         console.log(error)
         next(error)
@@ -30,10 +30,79 @@ export class MenusController {
     }
   }
 
-  userHasMenu() {
+  deleteParent() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.userHasMenu(req.user))
+        const { id } = req.params
+        return res.status(200).json(await this.service.deleteParent(Number(id)))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  upsertMain() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.upsertMainMenu(req.body))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  getAllMain() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.getAllMain(req.query))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  deleteMain() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params
+        return res.status(200).json(await this.service.deleteMain(Number(id)))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  upsertChild() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.upsertChildMenu(req.body))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  getAllChild() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.getAllChild(req.query))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  deleteChild() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params
+        return res.status(200).json(await this.service.deleteChild(Number(id)))
       } catch (error) {
         console.log(error)
         next(error)

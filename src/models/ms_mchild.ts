@@ -1,8 +1,8 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { menus, menusId } from './menus';
+import type { ms_mmain, ms_mmainId } from './ms_mmain';
 
-export interface menus_itemAttributes {
+export interface ms_mchildAttributes {
   id: number;
   menu_id?: number;
   label?: string;
@@ -10,14 +10,17 @@ export interface menus_itemAttributes {
   to_path?: string;
   url?: string;
   target?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-export type menus_itemPk = "id";
-export type menus_itemId = menus_item[menus_itemPk];
-export type menus_itemOptionalAttributes = "id" | "menu_id" | "label" | "icon" | "to_path" | "url" | "target";
-export type menus_itemCreationAttributes = Optional<menus_itemAttributes, menus_itemOptionalAttributes>;
+export type ms_mchildPk = "id";
+export type ms_mchildId = ms_mchild[ms_mchildPk];
+export type ms_mchildOptionalAttributes = "id" | "menu_id" | "label" | "icon" | "to_path" | "url" | "target" | "createdAt" | "updatedAt" | "deletedAt";
+export type ms_mchildCreationAttributes = Optional<ms_mchildAttributes, ms_mchildOptionalAttributes>;
 
-export class menus_item extends Model<menus_itemAttributes, menus_itemCreationAttributes> implements menus_itemAttributes {
+export class ms_mchild extends Model<ms_mchildAttributes, ms_mchildCreationAttributes> implements ms_mchildAttributes {
   id!: number;
   menu_id?: number;
   label?: string;
@@ -25,15 +28,18 @@ export class menus_item extends Model<menus_itemAttributes, menus_itemCreationAt
   to_path?: string;
   url?: string;
   target?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 
-  // menus_item belongsTo menus via menu_id
-  menu!: menus;
-  getMenu!: Sequelize.BelongsToGetAssociationMixin<menus>;
-  setMenu!: Sequelize.BelongsToSetAssociationMixin<menus, menusId>;
-  createMenu!: Sequelize.BelongsToCreateAssociationMixin<menus>;
+  // ms_mchild belongsTo ms_mmain via menu_id
+  menu!: ms_mmain;
+  getMenu!: Sequelize.BelongsToGetAssociationMixin<ms_mmain>;
+  setMenu!: Sequelize.BelongsToSetAssociationMixin<ms_mmain, ms_mmainId>;
+  createMenu!: Sequelize.BelongsToCreateAssociationMixin<ms_mmain>;
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof menus_item {
-    return menus_item.init({
+  static initModel(sequelize: Sequelize.Sequelize): typeof ms_mchild {
+    return ms_mchild.init({
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -44,7 +50,7 @@ export class menus_item extends Model<menus_itemAttributes, menus_itemCreationAt
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'menus',
+        model: 'ms_mmain',
         key: 'id'
       }
     },
@@ -70,9 +76,10 @@ export class menus_item extends Model<menus_itemAttributes, menus_itemCreationAt
     }
   }, {
     sequelize,
-    tableName: 'menus_item',
+    tableName: 'ms_mchild',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
     indexes: [
       {
         name: "menus_item_pkey",

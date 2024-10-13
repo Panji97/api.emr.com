@@ -17,14 +17,7 @@ export class AuthenticationValidation {
 
   register() {
     return [
-      body('email')
-        .notEmpty()
-
-        .withMessage('Email is required')
-
-        .isEmail()
-
-        .withMessage('Email must be valid format'),
+      body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Email must be valid format'),
 
       body('password')
         .notEmpty()
