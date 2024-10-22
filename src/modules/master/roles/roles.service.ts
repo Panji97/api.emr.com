@@ -17,7 +17,8 @@ export class RoleService {
 
     const { rows, count } = await model.ms_roles.findAndCountAll({
       limit,
-      offset
+      offset,
+      order: [['createdAt', 'DESC']]
     })
 
     if (!rows) throw new AppError('Data not found', 404)
