@@ -136,4 +136,49 @@ export class MenusService {
       where: { id }
     })
   }
+
+  async getAllMenus() {
+    const rows = await model.ms_mparent.findAll({
+      include: [
+        {
+          model: model.ms_mmain,
+          as: 'ms_mmains',
+          include: [
+            {
+              model: model.ms_mchild,
+              as: 'ms_mchildren'
+            }
+          ]
+        }
+      ]
+    })
+
+    if (!rows) throw new AppError('Data not found', 404)
+
+    const result = {
+      data: rows.map((e) => ({
+        key: `${e.id}`,
+        data: {
+          name: e.label,
+          path: e.to_path
+        },
+        children: e.ms_mmains.map((i) => ({
+          key: `${e.id}-${i.id}`,
+          data: {
+            name: i.label,
+            path: i.to_path
+          },
+          children: i.ms_mchildren.map((o) => ({
+            key: `${e.id}-${e.id}-${o.id}`,
+            data: {
+              name: o.label,
+              path: o.to_path
+            }
+          }))
+        }))
+      }))
+    }
+
+    return result
+  }
 }

@@ -111,4 +111,15 @@ export class MenusController {
       }
     }
   }
+
+  getAllMenus() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        return res.status(200).json(await this.service.getAllMenus())
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
 }

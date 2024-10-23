@@ -23,6 +23,7 @@ export class MenusRoutes {
     this.router.post('/child', this.validation.upsertChild(), this.controller.upsertChild())
     this.router.get('/child/:id', this.controller.getAllChild())
     this.router.delete('/child/:id', this.controller.deleteChild())
+    this.router.get('/', this.controller.getAllMenus())
     return this.router
   }
 }
