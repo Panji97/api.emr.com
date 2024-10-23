@@ -9,6 +9,12 @@ import { ms_roles as _ms_roles } from "./ms_roles";
 import type { ms_rolesAttributes, ms_rolesCreationAttributes } from "./ms_roles";
 import { resetpassword as _resetpassword } from "./resetpassword";
 import type { resetpasswordAttributes, resetpasswordCreationAttributes } from "./resetpassword";
+import { roles_has_mchild as _roles_has_mchild } from "./roles_has_mchild";
+import type { roles_has_mchildAttributes, roles_has_mchildCreationAttributes } from "./roles_has_mchild";
+import { roles_has_mmain as _roles_has_mmain } from "./roles_has_mmain";
+import type { roles_has_mmainAttributes, roles_has_mmainCreationAttributes } from "./roles_has_mmain";
+import { roles_has_mparent as _roles_has_mparent } from "./roles_has_mparent";
+import type { roles_has_mparentAttributes, roles_has_mparentCreationAttributes } from "./roles_has_mparent";
 import { users as _users } from "./users";
 import type { usersAttributes, usersCreationAttributes } from "./users";
 
@@ -18,6 +24,9 @@ export {
   _ms_mparent as ms_mparent,
   _ms_roles as ms_roles,
   _resetpassword as resetpassword,
+  _roles_has_mchild as roles_has_mchild,
+  _roles_has_mmain as roles_has_mmain,
+  _roles_has_mparent as roles_has_mparent,
   _users as users,
 };
 
@@ -32,6 +41,12 @@ export type {
   ms_rolesCreationAttributes,
   resetpasswordAttributes,
   resetpasswordCreationAttributes,
+  roles_has_mchildAttributes,
+  roles_has_mchildCreationAttributes,
+  roles_has_mmainAttributes,
+  roles_has_mmainCreationAttributes,
+  roles_has_mparentAttributes,
+  roles_has_mparentCreationAttributes,
   usersAttributes,
   usersCreationAttributes,
 };
@@ -42,6 +57,9 @@ export function initModels(sequelize: Sequelize) {
   const ms_mparent = _ms_mparent.initModel(sequelize);
   const ms_roles = _ms_roles.initModel(sequelize);
   const resetpassword = _resetpassword.initModel(sequelize);
+  const roles_has_mchild = _roles_has_mchild.initModel(sequelize);
+  const roles_has_mmain = _roles_has_mmain.initModel(sequelize);
+  const roles_has_mparent = _roles_has_mparent.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
   ms_mchild.belongsTo(ms_mmain, { as: "menu", foreignKey: "menu_id"});
@@ -55,6 +73,9 @@ export function initModels(sequelize: Sequelize) {
     ms_mparent: ms_mparent,
     ms_roles: ms_roles,
     resetpassword: resetpassword,
+    roles_has_mchild: roles_has_mchild,
+    roles_has_mmain: roles_has_mmain,
+    roles_has_mparent: roles_has_mparent,
     users: users,
   };
 }
