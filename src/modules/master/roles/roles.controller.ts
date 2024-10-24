@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { RoleService } from './roles.service'
+import { pgClient } from '../../../config/config.database'
 
 export class RolesController {
   private readonly service: RoleService
+  private readonly connection = pgClient.getConnection()
 
   constructor() {
     this.service = new RoleService()
+    this.connection = pgClient.getConnection()
   }
 
   upsert() {
@@ -39,6 +42,24 @@ export class RolesController {
         const { id } = req.params
         return res.status(200).json({ data: await this.service.deleteRoles(Number(id)) })
       } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  upsertRolesHasPermission() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      const transaction = await this.connection.transaction()
+
+      try {
+        const data = await this.service.upsertRolesHasPermission(transaction, req.body)
+
+        await transaction.commit()
+
+        return res.status(200).json({ data })
+      } catch (error) {
+        await transaction.rollback()
         console.log(error)
         next(error)
       }

@@ -41,4 +41,9 @@ export class RoleService {
       where: { id }
     })
   }
+
+  async upsertRolesHasPermission(transaction: any, payload: any) {
+    console.log(payload)
+    return 'OK'
+  }
 }
