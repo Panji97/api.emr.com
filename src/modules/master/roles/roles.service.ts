@@ -2,12 +2,37 @@ import { AppError } from '../../../exception/exception.custom'
 import { model } from '../../../models'
 import { ms_rolesAttributes } from '../../../models/ms_roles'
 import { paginationInterface } from './roles.interface'
+import { roles_has_mparentAttributes } from '../../../models/roles_has_mparent'
+import { roles_has_mmainAttributes } from '../../../models/roles_has_mmain'
+import { roles_has_mchildAttributes } from '../../../models/roles_has_mchild'
 
 export class RoleService {
-  async upsertRoles(payload: ms_rolesAttributes) {
-    return await model.ms_roles.upsert({
-      ...payload
-    })
+  async upsertRoles(
+    payload: ms_rolesAttributes & roles_has_mparentAttributes & roles_has_mmainAttributes & roles_has_mchildAttributes,
+    transaction: any
+  ) {
+    const [role, createdRole] = await model.ms_roles.upsert(
+      {
+        ...payload
+      },
+      {
+        transaction,
+        returning: true
+      }
+    )
+
+    const [mparent, createdMparent] = await model.roles_has_mparent.upsert(
+      {
+        ...payload,
+        role_id: role.id
+      },
+      {
+        transaction,
+        returning: true
+      }
+    )
+
+    return
   }
 
   async getAllMain(payload: paginationInterface) {
@@ -40,10 +65,5 @@ export class RoleService {
     return await model.ms_roles.destroy({
       where: { id }
     })
-  }
-
-  async upsertRolesHasPermission(transaction: any, payload: any) {
-    console.log(payload)
-    return 'OK'
   }
 }
