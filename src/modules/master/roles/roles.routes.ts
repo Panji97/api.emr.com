@@ -13,6 +13,7 @@ export class RolesRoutes {
   routes(): Router {
     this.router.post('/', this.controller.upsert())
     this.router.get('/', this.controller.findAndCountAll())
+    this.router.get('/:id', this.controller.findAllPermission())
     this.router.delete('/:id', this.controller.destroy())
     return this.router
   }

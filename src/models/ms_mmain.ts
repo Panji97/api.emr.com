@@ -2,6 +2,8 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { ms_mchild, ms_mchildId } from './ms_mchild';
 import type { ms_mparent, ms_mparentId } from './ms_mparent';
+import type { roles_has_mchild, roles_has_mchildId } from './roles_has_mchild';
+import type { roles_has_mmain, roles_has_mmainId } from './roles_has_mmain';
 
 export interface ms_mmainAttributes {
   id: number;
@@ -51,6 +53,30 @@ export class ms_mmain extends Model<ms_mmainAttributes, ms_mmainCreationAttribut
   hasMs_mchild!: Sequelize.HasManyHasAssociationMixin<ms_mchild, ms_mchildId>;
   hasMs_mchildren!: Sequelize.HasManyHasAssociationsMixin<ms_mchild, ms_mchildId>;
   countMs_mchildren!: Sequelize.HasManyCountAssociationsMixin;
+  // ms_mmain hasMany roles_has_mchild via mmain_id
+  roles_has_mchildren!: roles_has_mchild[];
+  getRoles_has_mchildren!: Sequelize.HasManyGetAssociationsMixin<roles_has_mchild>;
+  setRoles_has_mchildren!: Sequelize.HasManySetAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  addRoles_has_mchild!: Sequelize.HasManyAddAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  addRoles_has_mchildren!: Sequelize.HasManyAddAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  createRoles_has_mchild!: Sequelize.HasManyCreateAssociationMixin<roles_has_mchild>;
+  removeRoles_has_mchild!: Sequelize.HasManyRemoveAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  removeRoles_has_mchildren!: Sequelize.HasManyRemoveAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  hasRoles_has_mchild!: Sequelize.HasManyHasAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  hasRoles_has_mchildren!: Sequelize.HasManyHasAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  countRoles_has_mchildren!: Sequelize.HasManyCountAssociationsMixin;
+  // ms_mmain hasMany roles_has_mmain via mmain_id
+  roles_has_mmains!: roles_has_mmain[];
+  getRoles_has_mmains!: Sequelize.HasManyGetAssociationsMixin<roles_has_mmain>;
+  setRoles_has_mmains!: Sequelize.HasManySetAssociationsMixin<roles_has_mmain, roles_has_mmainId>;
+  addRoles_has_mmain!: Sequelize.HasManyAddAssociationMixin<roles_has_mmain, roles_has_mmainId>;
+  addRoles_has_mmains!: Sequelize.HasManyAddAssociationsMixin<roles_has_mmain, roles_has_mmainId>;
+  createRoles_has_mmain!: Sequelize.HasManyCreateAssociationMixin<roles_has_mmain>;
+  removeRoles_has_mmain!: Sequelize.HasManyRemoveAssociationMixin<roles_has_mmain, roles_has_mmainId>;
+  removeRoles_has_mmains!: Sequelize.HasManyRemoveAssociationsMixin<roles_has_mmain, roles_has_mmainId>;
+  hasRoles_has_mmain!: Sequelize.HasManyHasAssociationMixin<roles_has_mmain, roles_has_mmainId>;
+  hasRoles_has_mmains!: Sequelize.HasManyHasAssociationsMixin<roles_has_mmain, roles_has_mmainId>;
+  countRoles_has_mmains!: Sequelize.HasManyCountAssociationsMixin;
   // ms_mmain belongsTo ms_mparent via header_id
   header!: ms_mparent;
   getHeader!: Sequelize.BelongsToGetAssociationMixin<ms_mparent>;

@@ -62,10 +62,34 @@ export function initModels(sequelize: Sequelize) {
   const roles_has_mparent = _roles_has_mparent.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
+  roles_has_mchild.belongsTo(ms_mchild, { as: "mchild", foreignKey: "mchild_id"});
+  ms_mchild.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "mchild_id"});
   ms_mchild.belongsTo(ms_mmain, { as: "menu", foreignKey: "menu_id"});
   ms_mmain.hasMany(ms_mchild, { as: "ms_mchildren", foreignKey: "menu_id"});
+  roles_has_mchild.belongsTo(ms_mmain, { as: "mmain", foreignKey: "mmain_id"});
+  ms_mmain.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "mmain_id"});
+  roles_has_mmain.belongsTo(ms_mmain, { as: "mmain", foreignKey: "mmain_id"});
+  ms_mmain.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "mmain_id"});
   ms_mmain.belongsTo(ms_mparent, { as: "header", foreignKey: "header_id"});
   ms_mparent.hasMany(ms_mmain, { as: "ms_mmains", foreignKey: "header_id"});
+  roles_has_mchild.belongsTo(ms_mparent, { as: "mparent", foreignKey: "mparent_id"});
+  ms_mparent.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "mparent_id"});
+  roles_has_mmain.belongsTo(ms_mparent, { as: "mparent", foreignKey: "mparent_id"});
+  ms_mparent.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "mparent_id"});
+  roles_has_mparent.belongsTo(ms_mparent, { as: "mparent", foreignKey: "mparent_id"});
+  ms_mparent.hasMany(roles_has_mparent, { as: "roles_has_mparents", foreignKey: "mparent_id"});
+  roles_has_mchild.belongsTo(ms_roles, { as: "role", foreignKey: "role_id"});
+  ms_roles.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "role_id"});
+  roles_has_mmain.belongsTo(ms_roles, { as: "role", foreignKey: "role_id"});
+  ms_roles.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "role_id"});
+  roles_has_mparent.belongsTo(ms_roles, { as: "role", foreignKey: "role_id"});
+  ms_roles.hasMany(roles_has_mparent, { as: "roles_has_mparents", foreignKey: "role_id"});
+  roles_has_mchild.belongsTo(roles_has_mmain, { as: "role_main", foreignKey: "role_main_id"});
+  roles_has_mmain.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "role_main_id"});
+  roles_has_mchild.belongsTo(roles_has_mparent, { as: "role_parent", foreignKey: "role_parent_id"});
+  roles_has_mparent.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "role_parent_id"});
+  roles_has_mmain.belongsTo(roles_has_mparent, { as: "role_parent", foreignKey: "role_parent_id"});
+  roles_has_mparent.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "role_parent_id"});
 
   return {
     ms_mchild: ms_mchild,

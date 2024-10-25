@@ -1,10 +1,6 @@
 import { AppError } from '../../../exception/exception.custom'
 import { model } from '../../../models'
-import { ms_rolesAttributes } from '../../../models/ms_roles'
 import { paginationInterface } from './roles.interface'
-import { roles_has_mparentAttributes } from '../../../models/roles_has_mparent'
-import { roles_has_mmainAttributes } from '../../../models/roles_has_mmain'
-import { roles_has_mchildAttributes } from '../../../models/roles_has_mchild'
 
 export class RoleService {
   async upsertRoles(payload: any, transaction: any) {
@@ -122,6 +118,38 @@ export class RoleService {
       },
       data: rows
     }
+
+    return result
+  }
+
+  async getAllPermission(roleId: number) {
+    const mparents = await model.roles_has_mparent.findAll({
+      where: { role_id: roleId },
+      include: [
+        {
+          model: model.roles_has_mmain,
+          as: 'roles_has_mmains',
+          required: false,
+          include: [
+            {
+              model: model.roles_has_mchild,
+              as: 'roles_has_mchildren',
+              required: false
+            }
+          ]
+        }
+      ]
+    })
+
+    const result = mparents.map((mparent: any) => ({
+      mparent_id: mparent.mparent_id,
+      roles_has_mmains: mparent.roles_has_mmains.map((mmain: any) => ({
+        mmain_id: mmain.mmain_id,
+        roles_has_mchildren: mmain.roles_has_mchildren.map((mchild: any) => ({
+          mchild_id: mchild.mchild_id
+        }))
+      }))
+    }))
 
     return result
   }

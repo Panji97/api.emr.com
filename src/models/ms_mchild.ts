@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { ms_mmain, ms_mmainId } from './ms_mmain';
+import type { roles_has_mchild, roles_has_mchildId } from './roles_has_mchild';
 
 export interface ms_mchildAttributes {
   id: number;
@@ -32,6 +33,18 @@ export class ms_mchild extends Model<ms_mchildAttributes, ms_mchildCreationAttri
   updatedAt?: Date;
   deletedAt?: Date;
 
+  // ms_mchild hasMany roles_has_mchild via mchild_id
+  roles_has_mchildren!: roles_has_mchild[];
+  getRoles_has_mchildren!: Sequelize.HasManyGetAssociationsMixin<roles_has_mchild>;
+  setRoles_has_mchildren!: Sequelize.HasManySetAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  addRoles_has_mchild!: Sequelize.HasManyAddAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  addRoles_has_mchildren!: Sequelize.HasManyAddAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  createRoles_has_mchild!: Sequelize.HasManyCreateAssociationMixin<roles_has_mchild>;
+  removeRoles_has_mchild!: Sequelize.HasManyRemoveAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  removeRoles_has_mchildren!: Sequelize.HasManyRemoveAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  hasRoles_has_mchild!: Sequelize.HasManyHasAssociationMixin<roles_has_mchild, roles_has_mchildId>;
+  hasRoles_has_mchildren!: Sequelize.HasManyHasAssociationsMixin<roles_has_mchild, roles_has_mchildId>;
+  countRoles_has_mchildren!: Sequelize.HasManyCountAssociationsMixin;
   // ms_mchild belongsTo ms_mmain via menu_id
   menu!: ms_mmain;
   getMenu!: Sequelize.BelongsToGetAssociationMixin<ms_mmain>;

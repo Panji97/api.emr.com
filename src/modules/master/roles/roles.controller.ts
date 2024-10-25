@@ -43,6 +43,18 @@ export class RolesController {
     }
   }
 
+  findAllPermission() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params
+        return res.status(200).json(await this.service.getAllPermission(Number(id)))
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
   destroy() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
