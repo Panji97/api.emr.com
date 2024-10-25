@@ -11,26 +11,26 @@ export class RoleService {
     payload: ms_rolesAttributes & roles_has_mparentAttributes & roles_has_mmainAttributes & roles_has_mchildAttributes,
     transaction: any
   ) {
-    const [role, createdRole] = await model.ms_roles.upsert(
-      {
-        ...payload
-      },
-      {
-        transaction,
-        returning: true
-      }
-    )
+    // const [role, createdRole] = await model.ms_roles.upsert(
+    //   {
+    //     ...payload
+    //   },
+    //   {
+    //     transaction,
+    //     returning: true
+    //   }
+    // )
 
-    const [mparent, createdMparent] = await model.roles_has_mparent.upsert(
-      {
-        ...payload,
-        role_id: role.id
-      },
-      {
-        transaction,
-        returning: true
-      }
-    )
+    // const [mparent, createdMparent] = await model.roles_has_mparent.upsert(
+    //   {
+    //     ...payload,
+    //     role_id: role.id
+    //   },
+    //   {
+    //     transaction,
+    //     returning: true
+    //   }
+    // )
 
     return
   }

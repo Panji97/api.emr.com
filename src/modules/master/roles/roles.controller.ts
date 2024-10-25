@@ -16,6 +16,7 @@ export class RolesController {
       const transaction = await this.connection.transaction()
 
       try {
+        console.log(req.body)
         const data = await this.service.upsertRoles(req.body, transaction)
 
         await transaction.commit()
