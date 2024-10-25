@@ -8,9 +8,6 @@ import { roles_has_mchildAttributes } from '../../../models/roles_has_mchild'
 
 export class RoleService {
   async upsertRoles(payload: any, transaction: any) {
-    console.log(payload)
-
-    // Upsert role
     const [role, createdRole] = await model.ms_roles.upsert(
       {
         name: payload.formData.name
@@ -21,7 +18,6 @@ export class RoleService {
       }
     )
 
-    // Hapus semua entry lama di roles_has_mparent, roles_has_mmain, dan roles_has_mchild untuk role_id ini
     await model.roles_has_mparent.destroy({
       where: { role_id: role.id },
       force: true,
@@ -38,11 +34,9 @@ export class RoleService {
       transaction
     })
 
-    // Ambil mparent_id unik dari selectedNode
     const mparentIds = Array.from(new Set(Object.keys(payload.selectedNode).map((key) => key.split('-')[0])))
 
     for (const mparentId of mparentIds) {
-      // Insert ke roles_has_mparent
       const roleParent = await model.roles_has_mparent.create(
         {
           role_id: role.id,
@@ -54,7 +48,6 @@ export class RoleService {
         }
       )
 
-      // Dapatkan semua mmain_id yang sesuai dengan mparentId dan pastikan ada digit kedua
       const mmainIds = Array.from(
         new Set(
           Object.keys(payload.selectedNode)
@@ -63,7 +56,6 @@ export class RoleService {
         )
       )
 
-      // Insert ke roles_has_mmain untuk setiap mmain_id yang terkait dengan mparent_id saat ini
       for (const mmainId of mmainIds) {
         const roleMain = await model.roles_has_mmain.create(
           {
@@ -78,7 +70,6 @@ export class RoleService {
           }
         )
 
-        // Dapatkan semua mchild_id yang sesuai dengan mparentId dan mmainId, pastikan ada digit ketiga
         const mchildIds = Array.from(
           new Set(
             Object.keys(payload.selectedNode)
@@ -87,7 +78,6 @@ export class RoleService {
           )
         )
 
-        // Insert ke roles_has_mchild untuk setiap mchild_id yang terkait dengan mparent_id dan mmain_id saat ini
         for (const mchildId of mchildIds) {
           await model.roles_has_mchild.create(
             {
