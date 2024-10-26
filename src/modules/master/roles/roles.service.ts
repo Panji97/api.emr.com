@@ -127,29 +127,55 @@ export class RoleService {
       where: { role_id: roleId },
       include: [
         {
+          model: model.ms_mparent,
+          as: 'mparent'
+        },
+        {
           model: model.roles_has_mmain,
           as: 'roles_has_mmains',
-          required: false,
           include: [
+            {
+              model: model.ms_mmain,
+              as: 'mmain'
+            },
             {
               model: model.roles_has_mchild,
               as: 'roles_has_mchildren',
-              required: false
+              include: [
+                {
+                  model: model.ms_mchild,
+                  as: 'mchild'
+                }
+              ]
             }
           ]
         }
       ]
     })
 
-    const result = mparents.map((mparent: any) => ({
-      mparent_id: mparent.mparent_id,
-      roles_has_mmains: mparent.roles_has_mmains.map((mmain: any) => ({
-        mmain_id: mmain.mmain_id,
-        roles_has_mchildren: mmain.roles_has_mchildren.map((mchild: any) => ({
-          mchild_id: mchild.mchild_id
+    const result = {
+      data: mparents.map((e) => ({
+        key: e.mparent.id,
+        data: {
+          name: e.mparent.label,
+          path: e.mparent.to_path
+        },
+        children: e.roles_has_mmains.map((i) => ({
+          key: `${e.mparent.id}-${i.mmain.id}`,
+          data: {
+            name: i.mmain.label,
+            path: i.mmain.to_path
+          },
+          children: i.roles_has_mchildren.map((o) => ({
+            key: `${i.mmain.id}`,
+            data: {
+              name: o.mchild.label,
+              path: o.mchild.to_path
+            }
+          }))
         }))
       }))
-    }))
+    }
 
     return result
   }
