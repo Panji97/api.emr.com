@@ -57,10 +57,21 @@ export class RolesController {
 
   destroy() {
     return async (req: Request, res: Response, next: NextFunction) => {
+      const transaction = await this.connection.transaction()
+
       try {
         const { id } = req.params
-        return res.status(200).json({ data: await this.service.deleteRoles(Number(id)) })
+
+        const data = await this.service.deleteRoles(Number(id), transaction)
+
+        await transaction.commit()
+
+        return res.status(200).json({
+          message: 'success delete role  with permission',
+          data
+        })
       } catch (error) {
+        await transaction.rollback()
         console.log(error)
         next(error)
       }

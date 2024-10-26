@@ -180,9 +180,31 @@ export class RoleService {
     return result
   }
 
-  async deleteRoles(id: number) {
-    return await model.ms_roles.destroy({
-      where: { id }
+  async deleteRoles(roleId: number, transaction: any) {
+    await model.roles_has_mchild.destroy({
+      where: { role_id: roleId },
+      force: true,
+      transaction
     })
+
+    await model.roles_has_mmain.destroy({
+      where: { role_id: roleId },
+      force: true,
+      transaction
+    })
+
+    await model.roles_has_mparent.destroy({
+      where: { role_id: roleId },
+      force: true,
+      transaction
+    })
+
+    await model.ms_roles.destroy({
+      where: { id: roleId },
+      force: true,
+      transaction
+    })
+
+    return
   }
 }
