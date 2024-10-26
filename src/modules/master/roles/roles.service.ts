@@ -4,16 +4,18 @@ import { paginationInterface } from './roles.interface'
 
 export class RoleService {
   async upsertRoles(payload: any, transaction: any) {
-    const [role, createdRole] = await model.ms_roles.upsert(
-      {
-        id: payload.formData.id,
-        name: payload.formData.name
-      },
-      {
-        transaction,
-        returning: true
-      }
-    )
+    let payloadRoles: any = {
+      name: payload.formData.name
+    }
+
+    if (payload.formData.id) {
+      payloadRoles.id = payload.formData.id
+    }
+
+    const [role, createdRole] = await model.ms_roles.upsert(payloadRoles, {
+      transaction,
+      returning: true
+    })
 
     await model.roles_has_mparent.destroy({
       where: { role_id: role.id },
