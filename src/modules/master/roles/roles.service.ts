@@ -6,6 +6,7 @@ export class RoleService {
   async upsertRoles(payload: any, transaction: any) {
     const [role, createdRole] = await model.ms_roles.upsert(
       {
+        id: payload.formData.id,
         name: payload.formData.name
       },
       {
@@ -29,6 +30,8 @@ export class RoleService {
       force: true,
       transaction
     })
+
+    if (payload.selectedNode === null) return
 
     const mparentIds = Array.from(new Set(Object.keys(payload.selectedNode).map((key) => key.split('-')[0])))
 
