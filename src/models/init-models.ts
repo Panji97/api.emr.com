@@ -15,6 +15,8 @@ import { roles_has_mmain as _roles_has_mmain } from "./roles_has_mmain";
 import type { roles_has_mmainAttributes, roles_has_mmainCreationAttributes } from "./roles_has_mmain";
 import { roles_has_mparent as _roles_has_mparent } from "./roles_has_mparent";
 import type { roles_has_mparentAttributes, roles_has_mparentCreationAttributes } from "./roles_has_mparent";
+import { user_has_roles as _user_has_roles } from "./user_has_roles";
+import type { user_has_rolesAttributes, user_has_rolesCreationAttributes } from "./user_has_roles";
 import { users as _users } from "./users";
 import type { usersAttributes, usersCreationAttributes } from "./users";
 
@@ -27,6 +29,7 @@ export {
   _roles_has_mchild as roles_has_mchild,
   _roles_has_mmain as roles_has_mmain,
   _roles_has_mparent as roles_has_mparent,
+  _user_has_roles as user_has_roles,
   _users as users,
 };
 
@@ -47,6 +50,8 @@ export type {
   roles_has_mmainCreationAttributes,
   roles_has_mparentAttributes,
   roles_has_mparentCreationAttributes,
+  user_has_rolesAttributes,
+  user_has_rolesCreationAttributes,
   usersAttributes,
   usersCreationAttributes,
 };
@@ -60,6 +65,7 @@ export function initModels(sequelize: Sequelize) {
   const roles_has_mchild = _roles_has_mchild.initModel(sequelize);
   const roles_has_mmain = _roles_has_mmain.initModel(sequelize);
   const roles_has_mparent = _roles_has_mparent.initModel(sequelize);
+  const user_has_roles = _user_has_roles.initModel(sequelize);
   const users = _users.initModel(sequelize);
 
   roles_has_mchild.belongsTo(ms_mchild, { as: "mchild", foreignKey: "mchild_id"});
@@ -84,12 +90,16 @@ export function initModels(sequelize: Sequelize) {
   ms_roles.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "role_id"});
   roles_has_mparent.belongsTo(ms_roles, { as: "role", foreignKey: "role_id"});
   ms_roles.hasMany(roles_has_mparent, { as: "roles_has_mparents", foreignKey: "role_id"});
+  user_has_roles.belongsTo(ms_roles, { as: "role", foreignKey: "role_id"});
+  ms_roles.hasMany(user_has_roles, { as: "user_has_roles", foreignKey: "role_id"});
   roles_has_mchild.belongsTo(roles_has_mmain, { as: "role_main", foreignKey: "role_main_id"});
   roles_has_mmain.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "role_main_id"});
   roles_has_mchild.belongsTo(roles_has_mparent, { as: "role_parent", foreignKey: "role_parent_id"});
   roles_has_mparent.hasMany(roles_has_mchild, { as: "roles_has_mchildren", foreignKey: "role_parent_id"});
   roles_has_mmain.belongsTo(roles_has_mparent, { as: "role_parent", foreignKey: "role_parent_id"});
   roles_has_mparent.hasMany(roles_has_mmain, { as: "roles_has_mmains", foreignKey: "role_parent_id"});
+  user_has_roles.belongsTo(users, { as: "user", foreignKey: "user_id"});
+  users.hasOne(user_has_roles, { as: "user_has_role", foreignKey: "user_id"});
 
   return {
     ms_mchild: ms_mchild,
@@ -100,6 +110,7 @@ export function initModels(sequelize: Sequelize) {
     roles_has_mchild: roles_has_mchild,
     roles_has_mmain: roles_has_mmain,
     roles_has_mparent: roles_has_mparent,
+    user_has_roles: user_has_roles,
     users: users,
   };
 }

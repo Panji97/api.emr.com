@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { user_has_roles, user_has_rolesCreationAttributes, user_has_rolesId } from './user_has_roles';
 
 export interface usersAttributes {
   email: string;
@@ -31,6 +32,11 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   deletedAt?: Date;
   id!: number;
 
+  // users hasOne user_has_roles via user_id
+  user_has_role!: user_has_roles;
+  getUser_has_role!: Sequelize.HasOneGetAssociationMixin<user_has_roles>;
+  setUser_has_role!: Sequelize.HasOneSetAssociationMixin<user_has_roles, user_has_rolesId>;
+  createUser_has_role!: Sequelize.HasOneCreateAssociationMixin<user_has_roles>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof users {
     return users.init({

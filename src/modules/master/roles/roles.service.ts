@@ -70,7 +70,6 @@ export class RoleService {
             returning: true
           }
         )
-
         const mchildIds = Array.from(
           new Set(
             Object.keys(payload.selectedNode)
@@ -78,7 +77,6 @@ export class RoleService {
               .map((key) => key.split('-')[2]) // Ambil digit ketiga sebagai mchildId
           )
         )
-
         for (const mchildId of mchildIds) {
           await model.roles_has_mchild.create(
             {

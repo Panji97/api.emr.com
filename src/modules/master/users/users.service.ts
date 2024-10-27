@@ -1,15 +1,9 @@
 import { AppError } from '../../../exception/exception.custom'
 import { model } from '../../../models'
 import { paginationInterface } from './users.interface'
-import { pgClient } from '../../../config/config.database'
+import { user_has_rolesAttributes } from '../../../models/user_has_roles'
 
 export class UserService {
-  private sequelize: any
-
-  constructor() {
-    this.sequelize = pgClient.getConnection()
-  }
-
   async findall(payload: paginationInterface) {
     const page = payload.page || 1
     const limit = payload.limit || 5
@@ -44,5 +38,71 @@ export class UserService {
     if (!user) throw new AppError('Data not found', 404)
 
     return user
+  }
+
+  async upsertUserHasRoles(payload: user_has_rolesAttributes) {
+    return await model.user_has_roles.upsert({
+      ...payload
+    })
+  }
+
+  async userRolePermission(userId: number) {
+    const dataUserRole = await model.users.findByPk(userId, {
+      attributes: [],
+      include: [
+        {
+          model: model.user_has_roles,
+          as: 'user_has_role',
+          attributes: ['role_id']
+        }
+      ]
+    })
+
+    const dataMenus = await model.roles_has_mparent.findAll({
+      attributes: [],
+      where: {
+        role_id: dataUserRole?.user_has_role.role_id
+      },
+      include: [
+        {
+          model: model.ms_mparent,
+          as: 'mparent'
+        },
+        {
+          model: model.roles_has_mmain,
+          as: 'roles_has_mmains',
+          include: [
+            {
+              model: model.ms_mmain,
+              as: 'mmain'
+            },
+            {
+              model: model.roles_has_mchild,
+              as: 'roles_has_mchildren',
+              include: [
+                {
+                  model: model.ms_mchild,
+                  as: 'mchild'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    })
+
+    return dataMenus.map((e) => ({
+      label: e.mparent.label,
+      items: e.roles_has_mmains.map((o) => ({
+        label: o.mmain.label,
+        icon: o.mmain.icon,
+        to: o.mmain.to_path,
+        items: o.roles_has_mchildren.map((i) => ({
+          label: i.mchild.label,
+          icon: i.mchild.icon,
+          to: i.mchild.to_path
+        }))
+      }))
+    }))
   }
 }

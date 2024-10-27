@@ -12,6 +12,8 @@ export class UserRoutes {
 
   routes(): Router {
     this.router.get('/', this.controller.findall())
+    this.router.post('/roles', this.controller.upsertUserHasRole())
+    this.router.get('/roles', this.controller.userRolePermission())
     return this.router
   }
 }

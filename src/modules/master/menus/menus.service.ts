@@ -169,7 +169,7 @@ export class MenusService {
             path: i.to_path
           },
           children: i.ms_mchildren.map((o) => ({
-            key: `${e.id}-${e.id}-${o.id}`,
+            key: `${e.id}-${i.id}-${o.id}`,
             data: {
               name: o.label,
               path: o.to_path

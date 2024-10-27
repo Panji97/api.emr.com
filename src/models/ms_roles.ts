@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { roles_has_mchild, roles_has_mchildId } from './roles_has_mchild';
 import type { roles_has_mmain, roles_has_mmainId } from './roles_has_mmain';
 import type { roles_has_mparent, roles_has_mparentId } from './roles_has_mparent';
+import type { user_has_roles, user_has_rolesId } from './user_has_roles';
 
 export interface ms_rolesAttributes {
   id: number;
@@ -60,6 +61,18 @@ export class ms_roles extends Model<ms_rolesAttributes, ms_rolesCreationAttribut
   hasRoles_has_mparent!: Sequelize.HasManyHasAssociationMixin<roles_has_mparent, roles_has_mparentId>;
   hasRoles_has_mparents!: Sequelize.HasManyHasAssociationsMixin<roles_has_mparent, roles_has_mparentId>;
   countRoles_has_mparents!: Sequelize.HasManyCountAssociationsMixin;
+  // ms_roles hasMany user_has_roles via role_id
+  user_has_roles!: user_has_roles[];
+  getUser_has_roles!: Sequelize.HasManyGetAssociationsMixin<user_has_roles>;
+  setUser_has_roles!: Sequelize.HasManySetAssociationsMixin<user_has_roles, user_has_rolesId>;
+  addUser_has_role!: Sequelize.HasManyAddAssociationMixin<user_has_roles, user_has_rolesId>;
+  addUser_has_roles!: Sequelize.HasManyAddAssociationsMixin<user_has_roles, user_has_rolesId>;
+  createUser_has_role!: Sequelize.HasManyCreateAssociationMixin<user_has_roles>;
+  removeUser_has_role!: Sequelize.HasManyRemoveAssociationMixin<user_has_roles, user_has_rolesId>;
+  removeUser_has_roles!: Sequelize.HasManyRemoveAssociationsMixin<user_has_roles, user_has_rolesId>;
+  hasUser_has_role!: Sequelize.HasManyHasAssociationMixin<user_has_roles, user_has_rolesId>;
+  hasUser_has_roles!: Sequelize.HasManyHasAssociationsMixin<user_has_roles, user_has_rolesId>;
+  countUser_has_roles!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof ms_roles {
     return ms_roles.init({
