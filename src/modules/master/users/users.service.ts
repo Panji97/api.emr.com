@@ -97,11 +97,14 @@ export class UserService {
         label: o.mmain.label,
         icon: o.mmain.icon,
         to: o.mmain.to_path,
-        items: o.roles_has_mchildren.map((i) => ({
-          label: i.mchild.label,
-          icon: i.mchild.icon,
-          to: i.mchild.to_path
-        }))
+        items:
+          o.roles_has_mchildren.length > 0
+            ? o.roles_has_mchildren.map((i) => ({
+                label: i.mchild.label,
+                icon: i.mchild.icon,
+                to: i.mchild.to_path
+              }))
+            : null
       }))
     }))
   }

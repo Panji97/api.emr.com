@@ -7,6 +7,7 @@ import { usersAttributes } from '../../models/users'
 import { EmailService } from '../../utils/nodemailer'
 import { AppError } from '../../exception/exception.custom'
 import { resetpasswordAttributes } from '../../models/resetpassword'
+import { Op } from 'sequelize'
 
 export class AuthenticationService {
   private email: EmailService
@@ -22,9 +23,30 @@ export class AuthenticationService {
 
     const hashPassword = await bcrypt.hash(payload.password, 12)
 
-    return await model.users.create({
-      email: payload.email,
-      password: hashPassword
+    const userCreated = await model.users.create(
+      {
+        email: payload.email,
+        password: hashPassword
+      },
+      {
+        returning: true
+      }
+    )
+
+    const checkRoles = await model.ms_roles.findOne({
+      where: {
+        name: {
+          [Op.like]: `USER`
+        }
+      },
+      raw: true
+    })
+
+    if (!checkRoles) throw new AppError('Role default is not found', 404)
+
+    return await model.user_has_roles.create({
+      user_id: userCreated.id,
+      role_id: checkRoles.id
     })
   }
 
