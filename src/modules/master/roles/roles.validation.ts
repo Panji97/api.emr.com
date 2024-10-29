@@ -21,7 +21,7 @@ export class RolesValidation {
 
   upsert() {
     return [
-      body('name')
+      body('formData.name')
         .notEmpty()
         .withMessage('Role name is required'),
       this.validate.bind(this)
