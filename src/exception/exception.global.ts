@@ -6,7 +6,6 @@ const handleForeignKeyConstraintError = (err: any): AppError => {
   return new AppError(`Cannot delete or update because there are related records`, 400)
 }
 
-// Error handler untuk development mode
 const sendErrorDev = (err: AppError, req: Request, res: Response): void => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -16,16 +15,13 @@ const sendErrorDev = (err: AppError, req: Request, res: Response): void => {
   })
 }
 
-// Error handler untuk production mode
 const sendErrorProd = (err: AppError, req: Request, res: Response): void => {
-  // Jika error-nya adalah operational, kirimkan pesan yang aman untuk user
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message
     })
   } else {
-    // Jika error tidak terduga, sembunyikan detailnya
     console.error('ERROR 💥:', err)
     res.status(500).json({
       status: 'error',
@@ -34,10 +30,8 @@ const sendErrorProd = (err: AppError, req: Request, res: Response): void => {
   }
 }
 
-// Higher-order function untuk error handler
 const errorHandler = () => {
   return (err: AppError, req: Request, res: Response, next: NextFunction): void => {
-    // Tetapkan status code default jika tidak ada
     err.statusCode = err.statusCode || 500
     err.status = err.status || 'error'
 
