@@ -26,7 +26,6 @@ export class RolesController {
         })
       } catch (error) {
         await transaction.rollback()
-        console.log(error)
         next(error)
       }
     }
@@ -37,7 +36,6 @@ export class RolesController {
       try {
         return res.status(200).json(await this.service.getAllMain(req.query))
       } catch (error) {
-        console.log(error)
         next(error)
       }
     }
@@ -49,7 +47,6 @@ export class RolesController {
         const { id } = req.params
         return res.status(200).json(await this.service.getAllPermission(Number(id)))
       } catch (error) {
-        console.log(error)
         next(error)
       }
     }
@@ -72,7 +69,6 @@ export class RolesController {
         })
       } catch (error) {
         await transaction.rollback()
-        // console.log(error)
         next(error)
       }
     }
