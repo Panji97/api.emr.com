@@ -2,6 +2,10 @@ import { Request, Response, NextFunction } from 'express'
 import { AppError } from './exception.custom'
 import { NODE_ENV } from '../uhuuy.json'
 
+const handleForeignKeyConstraintError = (err: any): AppError => {
+  return new AppError(`Cannot delete or update because there are related records`, 400)
+}
+
 // Error handler untuk development mode
 const sendErrorDev = (err: AppError, req: Request, res: Response): void => {
   res.status(err.statusCode).json({
@@ -37,28 +41,17 @@ const errorHandler = () => {
     err.statusCode = err.statusCode || 500
     err.status = err.status || 'error'
 
-    if (NODE_ENV === 'development') {
-      sendErrorDev(err, req, res)
-    } else if (NODE_ENV === 'production') {
-      let error = { ...err }
-      error.message = err.message
+    let error = { ...err }
+    err.message = err.message
 
-      // Menangani error spesifik, misal validasi, database error, dll
-      if (error.name === 'ValidationError') {
-        error = handleValidationErrorDB(error)
-      }
+    if (error.name === 'SequelizeForeignKeyConstraintError') error = handleForeignKeyConstraintError(error)
 
+    if (/development/i.test(NODE_ENV)) {
+      sendErrorDev(error as AppError, req, res)
+    } else if (/production/i.test(NODE_ENV)) {
       sendErrorProd(error as AppError, req, res)
     }
   }
-}
-
-// Contoh fungsi untuk menangani validasi error dari database (misalnya MongoDB)
-const handleValidationErrorDB = (err: any): AppError => {
-  const message = `Invalid input data: ${Object.values(err.errors)
-    .map((el: any) => el.message)
-    .join(', ')}`
-  return new AppError(message, 400)
 }
 
 export { errorHandler, AppError }

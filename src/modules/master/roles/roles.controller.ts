@@ -72,7 +72,7 @@ export class RolesController {
         })
       } catch (error) {
         await transaction.rollback()
-        console.log(error)
+        // console.log(error)
         next(error)
       }
     }
