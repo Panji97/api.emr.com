@@ -24,9 +24,13 @@ export class RolesValidation {
       body('formData.name')
         .notEmpty()
         .withMessage('Role name is required'),
-      body('formData.selectedNode')
-        .notEmpty()
-        .withMessage('Menu selected is required'),
+      body('selectedNode').custom((value) => {
+        if (value === null) {
+          throw new Error('Menu selected is required')
+        }
+
+        return true
+      }),
       this.validate.bind(this)
     ]
   }
