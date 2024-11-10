@@ -11,6 +11,20 @@ export class UserService {
 
     const { rows, count } = await model.users.findAndCountAll({
       attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt', 'password', 'token'] },
+      include: [
+        {
+          model: model.user_has_roles,
+          as: 'user_has_role',
+          attributes: ['id'],
+          include: [
+            {
+              model: model.ms_roles,
+              as: 'role',
+              attributes: ['id', 'name']
+            }
+          ]
+        }
+      ],
       limit,
       offset
     })

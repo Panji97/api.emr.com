@@ -14,6 +14,7 @@ export class UserController {
       try {
         return res.status(200).json(await this.service.findall(req.query))
       } catch (error) {
+        console.log(error)
         next(error)
       }
     }
