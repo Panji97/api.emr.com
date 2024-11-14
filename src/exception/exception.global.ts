@@ -35,15 +35,15 @@ const errorHandler = () => {
     err.statusCode = err.statusCode || 500
     err.status = err.status || 'error'
 
-    let error = { ...err }
-    err.message = err.message
+    if (NODE_ENV === 'development') {
+      sendErrorDev(err, req, res)
+    } else if (NODE_ENV === 'production') {
+      let error = { ...err }
+      error.message = err.message
 
-    if (error.name === 'SequelizeForeignKeyConstraintError') error = handleForeignKeyConstraintError(error)
+      if (error.name === 'SequelizeForeignKeyConstraintError') error = handleForeignKeyConstraintError(error)
 
-    if (/development/i.test(NODE_ENV)) {
-      sendErrorDev(error as AppError, req, res)
-    } else if (/production/i.test(NODE_ENV)) {
-      sendErrorProd(error as AppError, req, res)
+      sendErrorProd(error, req, res)
     }
   }
 }
