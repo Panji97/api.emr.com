@@ -12,12 +12,15 @@ export class PgProvider {
       host: db.HOST,
       port: db.PORT,
       logging: false,
-      dialectOptions: {
-        ssl: {
-          require: db.SSLMODE === 'require',
-          rejectUnauthorized: false
-        }
-      }
+      dialectOptions:
+        NODE_ENV === 'development'
+          ? {}
+          : {
+              ssl: {
+                require: db.SSLMODE === 'require',
+                rejectUnauthorized: false
+              }
+            }
     })
   }
 
