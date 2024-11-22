@@ -1,0 +1,31 @@
+{
+  "NODE_ENV": "development",
+  "PORT": 8080,
+  "CORS": "*",
+  "SECRET_JWT": "JANGAN LUPA MANDI",
+  "WHITE_LIST": "http://localhost:3000",
+  "PG": {
+    "HOST": "ep-tiny-moon-a13v3db3.ap-southeast-1.aws.neon.tech",
+    "USER": "emr_owner",
+    "PORT": 5432,
+    "PASS": "MXYDri6Cs8TE",
+    "NAME": "emr",
+    "SSLMODE": "require"
+  },
+  "PG_LOCAL": {
+    "HOST": "localhost",
+    "USER": "postgres",
+    "PORT": 5432,
+    "PASS": "000000",
+    "NAME": "emr",
+    "SSLMODE": "require"
+  },
+  "EMAIL": {
+    "FROM": "team@support.com",
+    "HOST": "sandbox.smtp.mailtrap.io",
+    "NAME": "43aff8c094d087",
+    "PORT": 2525,
+    "PASS": "bd9a9536a4162f",
+    "SECU": false
+  }
+}
