@@ -99,7 +99,7 @@ export class RoleService {
     return
   }
 
-  async getAllMain(payload: paginationInterface) {
+  async getAllRoles(payload: paginationInterface) {
     const page = payload.page || 1
     const limit = payload.limit || 20
     const offset = (page - 1) * limit

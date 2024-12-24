@@ -1,7 +1,7 @@
 import { CORS } from '../uhuuy.json'
 import cors from 'cors'
 
-const corsHandler = () => {
+export const corsHandler = () => {
   return cors({
     /**
      * --------------------------------------------------------------------------
@@ -26,5 +26,3 @@ const corsHandler = () => {
     optionsSuccessStatus: 204
   })
 }
-
-export default corsHandler

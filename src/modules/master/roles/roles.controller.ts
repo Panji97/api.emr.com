@@ -34,7 +34,7 @@ export class RolesController {
   findAndCountAll() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        return res.status(200).json(await this.service.getAllMain(req.query))
+        return res.status(200).json(await this.service.getAllRoles(req.query))
       } catch (error) {
         next(error)
       }

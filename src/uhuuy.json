@@ -17,7 +17,7 @@
     "USER": "postgres",
     "PORT": 5432,
     "PASS": "000000",
-    "NAME": "emr",
+    "NAME": "medical_record_v1",
     "SSLMODE": "require"
   },
   "EMAIL": {

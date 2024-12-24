@@ -9,6 +9,12 @@
       "options": {
         "printWidth": 60
       }
+    },
+    {
+      "files": "*.test.ts",
+      "options": {
+        "printWidth": 60
+      }
     }
   ]
 }
